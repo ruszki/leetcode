@@ -1,2 +1,3 @@
-# leetcode
-My LeetCode solutions
+# Ruszki's LeetCode Solutions
+
+My submitted solutions of different LeetCode challenges.
