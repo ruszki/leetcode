@@ -5,7 +5,7 @@ import java.util.*;
 // Class to search for the shortest palindrome chain in a string
 // A palindrome chain is a list of consecutive palindromes in a string
 class PalindromeChainSearch {
-    // Start and end characters for all of the palindromes which are longer than 1 character
+    // Start and end characters for all the palindromes which are longer than 1 character
     private final Map<Integer, List<Integer>> palindromeBorders;
     // All characters which is reached by the algorithm and a palindrome starts from it
     private final Set<Integer> reachedChars;
@@ -13,7 +13,7 @@ class PalindromeChainSearch {
     private List<Integer> currentEndChars;
     // The number of steps taken to found the shortest palindrome chain
     private int currentLevel;
-    // Whether a shortest palindrome chain is found
+    // Whether any shortest palindrome chain is found
     private boolean isFoundShortest;
     // The size of the string
     private int stringSize;
