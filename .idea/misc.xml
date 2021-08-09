@@ -3,6 +3,7 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/07-palindrome-partitioning-ii" />
+    <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/08-rank-transformation-of-a-matrix" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="16" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
