@@ -1,5 +1,6 @@
 package com.ruszki.leetcode.rtoam;
 
+// Represents either a row or a column in a matrix
 public class MatrixPartPosition implements Comparable<MatrixPartPosition> {
     private final MatrixPartPositionType type;
     private final int value;
@@ -17,6 +18,16 @@ public class MatrixPartPosition implements Comparable<MatrixPartPosition> {
         return this.value;
     }
 
+    public boolean isRow() {
+        return this.type == MatrixPartPositionType.ROW;
+    }
+
+    public boolean isColumn() {
+        return this.type == MatrixPartPositionType.COLUMN;
+    }
+
+    // Rows are considered smaller than columns. This is needed to be able to use with the disjoint set, but it can be
+    // also the other way around.
     @Override
     public int compareTo(MatrixPartPosition o) {
         if (o == null) {

@@ -4,7 +4,19 @@ import java.util.*;
 
 public class Solution {
     public int[][] matrixRankTransform(int[][] matrix) {
-        final Map<Integer, List<MatrixPosition>> positionsByValues = new TreeMap<>();
+        // Gather all unique value and their positions where they can be found in ascending order
+        final TreeMap<Integer, List<MatrixPosition>> positionsByValues = createPositionsByValues(matrix);
+        // The matrix which will include ranks of all elements in the original matrix
+        final int[][] rankMatrix = createEmptyRankMatrix(matrix);
+
+        updateRankListAndRankMatrix(positionsByValues, matrix, rankMatrix);
+
+        return rankMatrix;
+    }
+
+    // Gather all values in asceding order in the matrix and store their positions
+    private TreeMap<Integer, List<MatrixPosition>> createPositionsByValues(int[][] matrix) {
+        final TreeMap<Integer, List<MatrixPosition>> positionsByValues = new TreeMap<>();
 
         for (int rowIndex = 0; rowIndex < matrix.length; rowIndex++) {
             for (int columnIndex = 0; columnIndex < matrix[rowIndex].length; columnIndex++) {
@@ -16,70 +28,90 @@ public class Solution {
             }
         }
 
-        int[] rowRankList = new int[matrix.length];
-        int[] columnRankList = new int[matrix.length > 0 ? matrix[0].length : 0];
+        return positionsByValues;
+    }
 
-        int[][] rankMatrix = new int[matrix.length][];
+    // Create a matrix for ranks according to the input matrix. It will have the same size, and all of its elements will
+    // be zeros by default.
+    private int[][] createEmptyRankMatrix(int[][] matrix) {
+        final int[][] rankMatrix = new int[matrix.length][];
 
         for (int rankMatrixRowIndex = 0; rankMatrixRowIndex < matrix.length; rankMatrixRowIndex++) {
             rankMatrix[rankMatrixRowIndex] = new int[matrix[rankMatrixRowIndex].length];
         }
 
-        for (List<MatrixPosition> positions : positionsByValues.values()) {
-            int[] tempRowRankList = Arrays.copyOf(rowRankList, rowRankList.length);
-            int[] tempColumnRankList = Arrays.copyOf(columnRankList, columnRankList.length);
+        return rankMatrix;
+    }
 
-            DisjointSet<MatrixPartPosition> set = new DisjointSet<>();
-            for (int i = 0; i < matrix.length + matrix[0].length; i++) {
-                set.insert(new MatrixRowPosition(i));
-            }
-            for (int i = 0; i < matrix[0].length; i++) {
-                set.insert(new MatrixColumnPosition(i));
-            }
+    // Go through all unique values in ascending order to update the matrix of ranks
+    private void updateRankListAndRankMatrix(TreeMap<Integer, List<MatrixPosition>> positionsByValues, int[][] matrix,
+                                             int[][] rankMatrix) {
+        // A list which contains the current rank for every row and column
+        final RankList rankList = new RankList(matrix);
 
-            for (MatrixPosition position : positions) {
-                MatrixRowPosition x = position.getRow();
-                MatrixColumnPosition y = position.getColumn();
+        for (final List<MatrixPosition> positions : positionsByValues.values()) {
+            // A temporary list of ranks which will be used to increase ranks properly
+            final RankList tempRankList = new RankList(rankList);
+            // A disjoint set to connect ranks of rows and columns in the case of same values
+            final DisjointSet<MatrixPartPosition> set = createNewDisjointSet(matrix);
 
-                set.union(x, y,
-                        (newRoot, oldRoot) -> {
-                            int oldOldRootRank = 0;
-                            if (oldRoot.getType() == MatrixPartPosition.MatrixPartPositionType.ROW) {
-                                oldOldRootRank = tempRowRankList[oldRoot.getValue()];
-                            } else if (oldRoot.getType() == MatrixPartPosition.MatrixPartPositionType.COLUMN) {
-                                oldOldRootRank = tempColumnRankList[oldRoot.getValue()];
-                            }
+            connectRowsAndColumns(positions, set, tempRankList);
+            updateRanks(positions, set, tempRankList, rankList, rankMatrix);
+        }
+    }
 
-                            if (newRoot.getType() == MatrixPartPosition.MatrixPartPositionType.ROW) {
-                                int oldNewRootRank = tempRowRankList[newRoot.getValue()];
+    // Create a disjoint set and insert columns and rows into it
+    private DisjointSet<MatrixPartPosition> createNewDisjointSet(int[][] matrix) {
+        final DisjointSet<MatrixPartPosition> set = new DisjointSet<>();
 
-                                tempRowRankList[newRoot.getValue()] = Math.max(oldNewRootRank, oldOldRootRank);
-                            } else if (newRoot.getType() == MatrixPartPosition.MatrixPartPositionType.COLUMN) {
-                                int oldNewRootRank = tempColumnRankList[newRoot.getValue()];
-
-                                tempColumnRankList[newRoot.getValue()] = Math.max(oldNewRootRank, oldOldRootRank);
-                            }
-                        });
-            }
-
-            for (MatrixPosition position : positions) {
-                MatrixPartPosition rootPartPosition = set.findRoot(position.getRow());
-
-                int newRank = 1;
-
-                if (rootPartPosition.getType() == MatrixPartPosition.MatrixPartPositionType.ROW) {
-                    newRank = tempRowRankList[rootPartPosition.getValue()] + 1;
-                } else if (rootPartPosition.getType() == MatrixPartPosition.MatrixPartPositionType.COLUMN) {
-                    newRank = tempColumnRankList[rootPartPosition.getValue()] + 1;
-                }
-
-                rowRankList[position.getRow().getValue()] = newRank;
-                columnRankList[position.getColumn().getValue()] = newRank;
-
-                rankMatrix[position.getRow().getValue()][position.getColumn().getValue()] = newRank;
-            }
+        for (int i = 0; i < matrix.length + matrix[0].length; i++) {
+            set.insert(new MatrixRowPosition(i));
+        }
+        for (int i = 0; i < matrix[0].length; i++) {
+            set.insert(new MatrixColumnPosition(i));
         }
 
-        return rankMatrix;
+        return set;
+    }
+
+    // Connect rows and columns in the disjoint set for elements of the same value
+    private void connectRowsAndColumns(List<MatrixPosition> positions, DisjointSet<MatrixPartPosition> set,
+                                       RankList tempRankList) {
+        for (final MatrixPosition position : positions) {
+            final MatrixRowPosition x = position.getRow();
+            final MatrixColumnPosition y = position.getColumn();
+
+            // Connect the given row and column by a union procedure on the disjoint set
+            final DisjointSet<MatrixPartPosition>.UnionRoots unionRoots = set.union(x, y);
+
+            // If two trees were merged in the disjoint set then update the rank of the new root accordingly
+            if (unionRoots.getNewRoot() != unionRoots.getOldRoot()) {
+                final int oldNewRootRank = tempRankList.getRank(unionRoots.getNewRoot());
+                final int oldOldRootRank = tempRankList.getRank(unionRoots.getOldRoot());
+
+                // The new rank of the new common root will be the maximum of the ranks of the two roots previously
+                tempRankList.setRank(unionRoots.getNewRoot(), Math.max(oldNewRootRank, oldOldRootRank));
+            }
+        }
+    }
+
+    // Update ranks according to the new ranks coming from unions in the disjoint tree
+    private void updateRanks(List<MatrixPosition> positions, DisjointSet<MatrixPartPosition> set,
+                             RankList tempRankList, RankList rankList, int[][] rankMatrix) {
+        for (final MatrixPosition position : positions) {
+            // The rank of the root will be used
+            final MatrixPartPosition rootPartPosition = set.findRoot(position.getRow());
+
+            // The rank of the root is the largest rank which was used before, it should be increased for the new
+            // element
+            final int newRank = tempRankList.getRank(rootPartPosition) + 1;
+
+            // Set rank for the row and also for the column
+            rankList.setRank(position.getRow(), newRank);
+            rankList.setRank(position.getColumn(), newRank);
+
+            // Update the rank matrix with the proper rank for the given position
+            rankMatrix[position.getRow().getValue()][position.getColumn().getValue()] = newRank;
+        }
     }
 }

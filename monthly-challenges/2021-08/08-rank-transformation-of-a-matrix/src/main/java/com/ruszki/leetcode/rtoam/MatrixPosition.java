@@ -1,6 +1,6 @@
 package com.ruszki.leetcode.rtoam;
 
-// Stores a position in a matrix by row and column numbers
+// Represents a position in a matrix by its row and column
 public class MatrixPosition {
     private final MatrixRowPosition row;
     private final MatrixColumnPosition column;

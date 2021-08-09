@@ -9,19 +9,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// There are two solutions for this exercise. There is one which is simpler, but it's slow for large matrices.
+// The other one is much more complex, but it's better for large data.
 public class Main {
+    // Execute this for the fast but complex solution
     public static int[][] run(int[][] matrix) {
         Solution s = new Solution();
         return s.matrixRankTransform(matrix);
     }
 
+    // Execute this for the slow but simple solution
     public static int[][] runSlow(int[][] matrix) {
         SlowSolution s = new SlowSolution();
         return s.matrixRankTransform(matrix);
     }
 
     public static void main(String[] args) {
-        int[][] matrix = readMatrix("matrix.txt");
+        int[][] matrix = readMatrix("matrix-large.txt"); // There is also a simpler matrix in "matrix.txt"
 
         int[][] resultMatrix = run(matrix);
 

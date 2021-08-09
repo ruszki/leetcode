@@ -4,8 +4,9 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/07-palindrome-partitioning-ii" />
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/08-rank-transformation-of-a-matrix" />
+    <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/09-add-strings" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="16" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="openjdk-16" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

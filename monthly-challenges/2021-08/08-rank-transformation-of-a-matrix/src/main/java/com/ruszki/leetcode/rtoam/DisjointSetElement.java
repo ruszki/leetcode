@@ -1,9 +1,13 @@
 package com.ruszki.leetcode.rtoam;
 
+// Represents an element in the disjoint set
 public class DisjointSetElement<T extends Comparable<T>> implements Comparable<DisjointSetElement<T>> {
+    // The link to the parent element
     private DisjointSetElement<T> parent;
+    // The rank. Only ranks of root elements represents their tree's rank properly. Child node's ranks can be wrong.
     private int rank;
-    private T value;
+    // The value of the element
+    private final T value;
 
     public DisjointSetElement(T value) {
         this.parent = this;
