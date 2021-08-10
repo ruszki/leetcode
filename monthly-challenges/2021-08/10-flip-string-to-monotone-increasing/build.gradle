@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-group 'com.ruszki.leetcode.as'
+group 'com.ruszki.leetcode.fstmi'
 version '1.0'
 
 repositories {
@@ -16,7 +16,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.ruszki.leetcode.rtoam.Main'
+    mainClass = 'com.ruszki.leetcode.fstmi.Main'
 }
 
 test {
