@@ -7,6 +7,7 @@
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/09-add-strings" />
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/10-flip-string-to-monotone-increasing" />
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/11-array-of-doubled-pairs" />
+    <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/12-group-anagrams" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="openjdk-16" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
