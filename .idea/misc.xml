@@ -11,6 +11,7 @@
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/13-set-matrix-zeroes" />
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/14-remove-boxes" />
     <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/15-minimum-windows-substring" />
+    <file type="web" url="file://$PROJECT_DIR$/monthly-challenges/2021-08/16-range-sum-query-immutable" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="openjdk-16" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
